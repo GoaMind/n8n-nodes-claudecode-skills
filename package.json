@@ -1,6 +1,6 @@
 {
   "name": "@sureliving/n8n-nodes-claudecode",
-  "version": "0.1.9",
+  "version": "0.1.36",
   "description": "n8n node for Claude Code SDK integration with MCP support",
   "keywords": [
     "n8n-community-node-package",
@@ -52,7 +52,7 @@
     ]
   },
   "dependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.2.4"
+    "@anthropic-ai/claude-agent-sdk": "^0.2.17"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
