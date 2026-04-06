@@ -425,6 +425,14 @@ export class ClaudeCodeCreds implements INodeType {
 				description: 'Tools explicitly blocked (takes precedence)',
 			},
 			{
+				displayName: 'Enable Skills',
+				name: 'enableSkills',
+				type: 'boolean',
+				default: true,
+				description:
+					'Whether to allow Claude Code to use installed Skills (slash commands) from the marketplace',
+			},
+			{
 				displayName: 'Additional Options',
 				name: 'additionalOptions',
 				type: 'collection',
@@ -481,6 +489,7 @@ export class ClaudeCodeCreds implements INodeType {
 				const outputFormat = this.getNodeParameter('outputFormat', itemIndex) as string;
 				const allowedTools = this.getNodeParameter('allowedTools', itemIndex, []) as string[];
 				const disallowedTools = this.getNodeParameter('disallowedTools', itemIndex, []) as string[];
+				const enableSkills = this.getNodeParameter('enableSkills', itemIndex, true) as boolean;
 				const additionalOptions = this.getNodeParameter('additionalOptions', itemIndex) as {
 					systemPrompt?: string;
 					permissionMode?: string;
@@ -614,6 +623,20 @@ export class ClaudeCodeCreds implements INodeType {
 				if (effectiveCwd) queryOptions.options.cwd = effectiveCwd;
 				if (allowedTools.length > 0) queryOptions.options.allowedTools = allowedTools;
 				if (disallowedTools.length > 0) queryOptions.options.disallowedTools = disallowedTools;
+
+				if (enableSkills) {
+					queryOptions.options.allowedTools = [
+						...(queryOptions.options.allowedTools ?? []),
+						'Skill',
+						'ToolSearch',
+					];
+				} else {
+					queryOptions.options.disallowedTools = [
+						...(queryOptions.options.disallowedTools ?? []),
+						'Skill',
+						'ToolSearch',
+					];
+				}
 
 				if (operation === 'continue') {
 					queryOptions.options.resume = (
